@@ -69,15 +69,31 @@ SCG_SIRCCFG, SCG_FIRCCFG, SCG_SOSCCFG, SCG_SPLLCFG:	Cấu hình từng nguồn c
 
 SCG_SIRCDIVx, SCG_FIRCDIVx, SCG_SOSCDIVx, SCG_SPLLDIVx:	Thiết lập hệ số chia DIV1/DIV2 cho từng nguồn
 
+SCG_SIRCCSR, SCG_FIRCCSR, SCG_SOSCCSR, SCG_SPLLCSR: Kiểm tra trạng thái Valid và setup để Debug
 
+## 3. Peripheral Clock Controller (PCC)
+PCC (Peripheral Clock Control) dùng để: Bật/Tắt clock cho từng ngoại vi (UART, GPIO, LPTMR, LPIT, SPI, v.v.), mỗi ngoại vi có các thanh ghi riêng để cấu hình phần CLOCK CONTROL.
+### 3.1 Chức năng các thanh ghi trong PCCx
+| Bits  |  Tên                     |         Vai trò                                    |
+| ------|:------------------------:|:--------------------------------------------------:|
+| CGC   |Clock Gate Control        | Bật/tắt clock cho ngoại vi                         |
+| PCS   | Peripheral Clock Select  | Chọn nguồn clock cho ngoại vi (FIRC, SOSC, SPLL, …)|
+| PCD   | Peripheral Clock Divider | Chia tần số clock đầu vào (1, 2, 4, 8, …)          |
+| FRAC  | Fraction                 | Cho phép chia lẻ (ví dụ ×1.5)                      |
 
-### 1.4 INTERNAL CLOCKING REQUIREMENTS
-| Clock             | HSRUN     | RUN       | VLPR  | NOTE                                                                                    |
-| ------------------|:---------:|:---------:|:-----:|:---------------------------------------------------------------------------------------:|
-| CORE_CLK/SYS_CLK  | 112 MHz    |80 MHz    |4 MHz  | Phải được cấu hình lớn hơn hoặc bằng BUS_CLK                                            |
-| BUS_CLK           | 56 MHz     |48/40 MHz |4 MHz  | Phải là giá trị bằng CORE_CLK chia cho một số nguyên (1, 2, 3, 4, ...)                  |
-| FLASH_CLK         | 28 MHz     |26,67 MHz |1 MHz  | Phải là giá trị bằng CORE_CLK chia cho một số nguyên, và tỷ lệ CORE_CLK / FLASH_CLK <=8 |
+### 3.2 PCC Cho PORTD
+Cấu hình bit CGC trong thanh ghi PCCn thành 0x1b để bật clock cho PORT
 
+Cấu hình bit PCRn thành GPIO MODE thông qua PORT_PCR_MUX(1)
 
+GPIO mỗi PORT có 6 thanh ghi chín
+|Register|  Tên                     |         Vai trò                      | Loại  |
+| -------|:------------------------:|:------------------------------------:|:-----:|
+| PDOR	 | Data Output Register     | giá trị hiện tại xuất ra chân output | R/W   |
+| PSOR	 | Set Output Register      | ghi 1 để set 1 cho bit trong PDOR	   | WO    |
+| PCOR	 | Clear Output Register    | ghi 1 để clear bit trong PDOR	       | WO    |
+| PTOR	 | Toggle Output Register   | ghi 1 để đảo bit trong PDOR	       | WO    |
+| PDIR	 | Data Input Register      | đọc trạng thái logic ngoài chân      | RO    |
+| PDDR	 | Data Direction Register  | chọn chế độ input/output	           | R/W   |
 
 
