@@ -1,7 +1,7 @@
 # BLINK LED PROJECT
 ## 1. CLOCK DISTRIBUTION
 ### 1.1 Tổng quan
-    PLL (FIRC_CLK, SIRC_CLK, SPLL_CLK), SOSC_CLK, PMC clock signal (LPO128K_CLK) and Alternate sources
+    FIRC_CLK, SIRC_CLK, SPLL_CLK, SOSC_CLK
            │
            ▼  
     ┌──────────────┐
@@ -63,9 +63,11 @@ SCG_VCCR:	Cấu hình clock cho chế độ VLPR
 
 SCG_HCCR:	Cấu hình clock cho chế độ HSRUN
 
+SCG_CLKOUTCNFG: chọn nguồn xung clock nào trong SCG sẽ được xuất ra chân CLKOUT để quan sát qua oscillicope.
+
 SCG_SIRCCFG, SCG_FIRCCFG, SCG_SOSCCFG, SCG_SPLLCFG:	Cấu hình từng nguồn clock
 
-SCG_SIRCDIV, SCG_FIRCDIV, SCG_SOSCDIV, SCG_SPLLDIV:	Thiết lập hệ số chia DIV1/DIV2 cho từng nguồn
+SCG_SIRCDIVx, SCG_FIRCDIVx, SCG_SOSCDIVx, SCG_SPLLDIVx:	Thiết lập hệ số chia DIV1/DIV2 cho từng nguồn
 
 
 
@@ -75,6 +77,7 @@ SCG_SIRCDIV, SCG_FIRCDIV, SCG_SOSCDIV, SCG_SPLLDIV:	Thiết lập hệ số chia
 | CORE_CLK/SYS_CLK  | 112 MHz    |80 MHz    |4 MHz  | Phải được cấu hình lớn hơn hoặc bằng BUS_CLK                                            |
 | BUS_CLK           | 56 MHz     |48/40 MHz |4 MHz  | Phải là giá trị bằng CORE_CLK chia cho một số nguyên (1, 2, 3, 4, ...)                  |
 | FLASH_CLK         | 28 MHz     |26,67 MHz |1 MHz  | Phải là giá trị bằng CORE_CLK chia cho một số nguyên, và tỷ lệ CORE_CLK / FLASH_CLK <=8 |
+
 
 
 
