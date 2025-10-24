@@ -1,0 +1,16 @@
+-T
+"C:/Users/truon/workspaceS32DS.3.6.3/CMSIS_Driver_GPIO/Project_Settings/Linker_Files/S32K144_64_flash.ld"
+-Wl,-Map,"CMSIS_Driver_GPIO.map"
+-Xlinker
+--gc-sections
+-n
+-mcpu=cortex-m4
+-specs=rdimon.specs
+"./Project_Settings/Startup_Code/startup.o"
+"./Project_Settings/Startup_Code/startup_S32K144.o"
+"./Project_Settings/Startup_Code/system_S32K144.o"
+"./src/Driver_GPIO.o"
+"./src/Driver_PORT.o"
+"./src/GPIO_MCAL.o"
+"./src/PORT_MCAL.o"
+"./src/main.o"
