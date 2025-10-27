@@ -120,10 +120,10 @@ int main(void) {
 
 	Port_Init();
 	GPIO_Init();
-	if(GPIOdrv->GetInput(GPIO_PIN12)) GPIOdrv->SetOutput(GPIO_PIN12, 1U);
-	else GPIOdrv->SetOutput(GPIO_PIN12, 0U);
-	if(GPIOdrv->GetInput(GPIO_PIN13)) GPIOdrv->SetOutput(GPIO_PIN13, 1U);
-	else GPIOdrv->SetOutput(GPIO_PIN13, 0U);
+	if(GPIOdrv->GetInput(GPIO_PIN12)) GPIOdrv->SetOutput(GPIO_PIN16, 0U);
+	else GPIOdrv->SetOutput(GPIO_PIN16, 1U);
+	if(GPIOdrv->GetInput(GPIO_PIN13)) GPIOdrv->SetOutput(GPIO_PIN15, 0U);
+	else GPIOdrv->SetOutput(GPIO_PIN15, 1U);
 
 //    counter = 0;
 //
