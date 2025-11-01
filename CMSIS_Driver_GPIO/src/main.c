@@ -86,44 +86,50 @@
 #define GPIO_PIN13      13U
 
 extern ARM_DRIVER_GPIO             Driver_GPIO;
-static ARM_DRIVER_GPIO *GPIOdrv = &Driver_GPIO;
+ARM_DRIVER_GPIO *GPIOdrv = &Driver_GPIO;
 
 int counter, accumulator = 0, limit_value = 1000000;
 
-void delay_ms(uint32_t ms)
-{
-    volatile uint32_t i, j;
-    for (i = 0; i < ms; i++)
-        for (j = 0; j < 3000; j++);
-}
-
 void GPIO_Init(void)
 {
-	GPIOdrv->Setup          (GPIO_PIN0, NULL);
-	GPIOdrv->Setup          (GPIO_PIN15, NULL);
-	GPIOdrv->Setup          (GPIO_PIN12, NULL);
-	GPIOdrv->Setup          (GPIO_PIN13, NULL);
+    GPIOdrv->Setup          (GPIO_PIN0, NULL);
+    GPIOdrv->Setup          (GPIO_PIN15, NULL);
+    GPIOdrv->Setup          (GPIO_PIN12, NULL);
+    GPIOdrv->Setup          (GPIO_PIN13, NULL);
 
-	GPIOdrv->SetDirection   (GPIO_PIN0, ARM_GPIO_OUTPUT);
-	GPIOdrv->SetDirection   (GPIO_PIN15, ARM_GPIO_OUTPUT);
-	GPIOdrv->SetOutputMode  (GPIO_PIN15, ARM_GPIO_PUSH_PULL);
-	GPIOdrv->SetOutputMode  (GPIO_PIN15, ARM_GPIO_PUSH_PULL);
+    GPIOdrv->SetDirection   (GPIO_PIN0, ARM_GPIO_OUTPUT);
+    GPIOdrv->SetDirection   (GPIO_PIN15, ARM_GPIO_OUTPUT);
+    GPIOdrv->SetOutputMode  (GPIO_PIN15, ARM_GPIO_PUSH_PULL);
+    GPIOdrv->SetOutputMode  (GPIO_PIN15, ARM_GPIO_PUSH_PULL);
 
-	GPIOdrv->SetDirection   (GPIO_PIN12, ARM_GPIO_INPUT);
-	GPIOdrv->SetDirection   (GPIO_PIN13, ARM_GPIO_INPUT);
-	GPIOdrv->SetPullResistor(GPIO_PIN12, ARM_GPIO_PULL_DOWN);
-	GPIOdrv->SetPullResistor(GPIO_PIN13, ARM_GPIO_PULL_DOWN);
-
+    GPIOdrv->SetDirection   (GPIO_PIN12, ARM_GPIO_INPUT);
+    GPIOdrv->SetDirection   (GPIO_PIN13, ARM_GPIO_INPUT);
+    GPIOdrv->SetPullResistor(GPIO_PIN12, ARM_GPIO_PULL_DOWN);
+    GPIOdrv->SetPullResistor(GPIO_PIN13, ARM_GPIO_PULL_DOWN);
 }
 
 int main(void) {
 
-	Port_Init();
-	GPIO_Init();
-	if(GPIOdrv->GetInput(GPIO_PIN12)) GPIOdrv->SetOutput(GPIO_PIN16, 0U);
-	else GPIOdrv->SetOutput(GPIO_PIN16, 1U);
-	if(GPIOdrv->GetInput(GPIO_PIN13)) GPIOdrv->SetOutput(GPIO_PIN15, 0U);
-	else GPIOdrv->SetOutput(GPIO_PIN15, 1U);
+    Port_Init();
+    GPIO_Init();
+    if(GPIOdrv->GetInput(GPIO_PIN12))
+    {
+        GPIOdrv->SetOutput(GPIO_PIN0, 0U);
+
+    }
+    else
+    {
+        GPIOdrv->SetOutput(GPIO_PIN0, 1U);
+    }
+
+    if(GPIOdrv->GetInput(GPIO_PIN13))
+    {
+        GPIOdrv->SetOutput(GPIO_PIN15, 0U);
+    }
+    else
+    {
+        GPIOdrv->SetOutput(GPIO_PIN15, 1U);
+    }
 
 //    counter = 0;
 //
