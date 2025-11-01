@@ -29,9 +29,12 @@
  *
  */
 #include "S32K144.h"
-
+#include "clocks.h"
+#include "adc.h"
+#include "gpio.h"
 #include <stdio.h>
 #include <stdint.h>
+
 #if defined (__ghs__)
     #define __INTERRUPT_SVC  __interrupt
     #define __NO_RETURN _Pragma("ghs nowarning 111")
@@ -52,79 +55,6 @@
 int counter, accumulator = 0, limit_value = 1000000;
 uint32_t u32_gAdc_Value;
 
-void SOSCInit_8Mhz(void)
-{
-	IP_SCG->SOSCDIV = SCG_SOSCDIV_SOSCDIV1(1) | SCG_SOSCDIV_SOSCDIV2(1);
-	IP_SCG->SOSCCFG = SCG_SOSCCFG_EREFS(1) | SCG_SOSCCFG_HGO(0) | SCG_SOSCCFG_RANGE(2);
-	while(IP_SCG->SOSCCSR & SCG_SOSCCSR_LK_MASK);
-	IP_SCG->SOSCCSR = 0x00000001;
-	while(((IP_SCG->SOSCCSR & SCG_SOSCCSR_SOSCVLD_MASK)>> SCG_SOSCCSR_SOSCVLD_SHIFT)!=1){}
-}
-void SPLLInit_160Mhz(void)
-{
-	while(((IP_SCG->SPLLCSR & SCG_SPLLCSR_LK_MASK) >> SCG_SPLLCSR_LK_SHIFT)==1);
-	IP_SCG->SPLLCSR = 0x00000000;
-	IP_SCG->SPLLDIV = SCG_SPLLDIV_SPLLDIV1(2) | SCG_SPLLDIV_SPLLDIV2(3);
-	IP_SCG->SPLLCFG = SCG_SPLLCFG_MULT(8) | SCG_SPLLCFG_PREDIV(0);
-	/* PREDIV=0: Divide SOSC_CLK by 0+1=1 */
-    /* MULT=24:  Multiply SPLL by 4+24=40 */
-    /* SPLL_CLK = 8MHz / 1 * 40 / 2 = 160 MHz */
-	while(((IP_SCG->SPLLCSR & SCG_SPLLCSR_LK_MASK) >> SCG_SPLLCSR_LK_SHIFT)==1);
-	IP_SCG->SPLLCSR = 0x00000001;
-	while(((IP_SCG->SPLLCSR & SCG_SPLLCSR_SPLLVLD_MASK)>> SCG_SPLLCSR_SPLLVLD_SHIFT)!=1){}
-}
-void SetNormalRUNMode_80MHz(void)
-{
-	IP_SCG->RCCR = SCG_RCCR_SCS(6) | SCG_RCCR_DIVCORE(1) | SCG_RCCR_DIVBUS(2) | SCG_RCCR_DIVSLOW(3);
-	while((( IP_SCG->CSR & SCG_CSR_SCS_MASK) >> SCG_CSR_SCS_SHIFT ) !=6){}
-}
-void delay_ms(uint32_t ms)
-{
-    volatile uint32_t i, j;
-    for (i = 0; i < ms; i++)
-        for (j = 0; j < 3000; j++);
-}
-
-void PORTInit(void)
-{
-	IP_PCC->PCCn[PCC_PORTD_INDEX] |= PCC_PCCn_CGC(1);
-	IP_PORTD->PCR[PTD0]= PORT_PCR_MUX(1);
-	IP_PORTD->PCR[PTD15]= PORT_PCR_MUX(1);
-	IP_PORTD->PCR[PTD16]= PORT_PCR_MUX(1);
-	IP_PTD->PDDR |= (1<<PTD0 | 1<<PTD15 | 1<<PTD16);
-}
-
-void ADCInit(uint16_t ADC_Channel)
-{
-	IP_PCC->PCCn[PCC_ADC0_INDEX] = PCC_PCCn_CGC(0);
-	IP_PCC->PCCn[PCC_ADC0_INDEX] |= PCC_PCCn_PCS(1) | PCC_PCCn_CGC(1);
-
-	IP_ADC0->SC1[0] = ADC_SC1_ADCH(0X1F) | ADC_SC1_AIEN(0);
-
-	IP_ADC0->CFG1   = ADC_CFG1_ADICLK(0) | ADC_CFG1_ADIV(0) | ADC_CFG1_MODE(1);
-
-	IP_ADC0->CFG2 	= ADC_CFG2_SMPLTS(12);
-
-	IP_ADC0->SC2  	= ADC_SC2_ADTRG(0) | ADC_SC2_REFSEL(0);
-
-	IP_ADC0->SC3  	= ADC_SC3_AVGE(1) | ADC_SC3_AVGS(3);
-	IP_ADC0->SC3   |= ADC_SC3_CAL(1);                /* calibration */
-	while (IP_ADC0->SC3 & ADC_SC3_CAL_MASK);
-
-	IP_ADC0->SC3 |= ADC_SC3_ADCO(1);
-	IP_ADC0->SC1[0] = ADC_SC1_ADCH(ADC_Channel);
-}
-
-uint32_t ReadADC(void)
-{
-	uint16_t u16_ADC_result = IP_ADC0->R[0];
-	return (uint32_t)(u16_ADC_result * 5000 / 0xFFF);
-}
-
-uint8_t ADConversionCompleted(void)
-{
-	return ((IP_ADC0->SC1[0] & ADC_SC1_COCO_MASK)>>ADC_SC1_COCO_SHIFT);
-}
 int main(void) {
 	SOSCInit_8Mhz();   			/* Initialize system oscillator for 8 MHz xtal					*/
 	SPLLInit_160Mhz();			/* Initialize SPLL to 160 MHz with 8 MHz SOSC 					*/
