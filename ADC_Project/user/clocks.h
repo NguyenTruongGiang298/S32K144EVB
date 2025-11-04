@@ -1,6 +1,6 @@
 /**
  * @file clocks.h
- * @author your name (you@domain.com)
+ * @author Nguyễn Trường Giang
  * @brief Declare Clock configuration functions for S32K144
  * @version 0.1
  * @date 2025-11-01

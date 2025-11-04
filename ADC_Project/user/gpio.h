@@ -1,6 +1,6 @@
 /**
  * @file gpio.h
- * @author your name (you@domain.com)
+ * @author Nguyễn Trường Giang
  * @brief Declare a GPIO Initialization Function
  * @version 0.1
  * @date 2025-11-01

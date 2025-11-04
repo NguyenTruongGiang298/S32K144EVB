@@ -22,4 +22,5 @@ C_DEPS :=
 SUBDIRS := \
 Project_Settings/Startup_Code \
 src \
+user \
 

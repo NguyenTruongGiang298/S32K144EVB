@@ -1,6 +1,6 @@
 /**
  * @file clocks.c
- * @author your name (you@domain.com)
+ * @author Nguyễn Trường Giang
  * @brief Define Clock configuration functions for S32K144
  * @version 0.1
  * @date 2025-11-01
@@ -9,7 +9,7 @@
  *
  */
 #include "S32K144.h"
-
+#include "clocks.h"
 void SOSCInit_8Mhz(void)
 {
     IP_SCG->SOSCDIV = SCG_SOSCDIV_SOSCDIV1(1) | SCG_SOSCDIV_SOSCDIV2(1);

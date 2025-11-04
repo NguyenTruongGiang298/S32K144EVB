@@ -53,34 +53,37 @@
 #define PTD16 16U
 #define ADC_CHANNEL 2U
 int counter, accumulator = 0, limit_value = 1000000;
+
+
 uint32_t u32_gAdc_Value;
 
 int main(void) {
-	SOSCInit_8Mhz();   			/* Initialize system oscillator for 8 MHz xtal					*/
-	SPLLInit_160Mhz();			/* Initialize SPLL to 160 MHz with 8 MHz SOSC 					*/
-	SetNormalRUNMode_80MHz(); 	/* Init clocks: 80 MHz sysclk & core, 40 MHz bus, 20 MHz flash 	*/
-	PORTInit();     			/* Init port clocks and gpio outputs 							*/
-	ADCInit(ADC_CHANNEL);		/* Init ADC_init(); 											*/
+    SOSCInit_8Mhz();            /* Initialize system oscillator for 8 MHz xtal                  */
+    SPLLInit_160Mhz();          /* Initialize SPLL to 160 MHz with 8 MHz SOSC                   */
+    SetNormalRUNMode_80MHz();   /* Init clocks: 80 MHz sysclk & core, 40 MHz bus, 20 MHz flash  */
+    PORTInit();                 /* Init port clocks and gpio outputs                            */
+    ADCInit();                  /* Init ADC_init();                                             */
 
-	for(;;) {
-	    while(ADConversionCompleted()==0){}   		/* Wait for conversion complete flag */
-	    u32_gAdc_Value = ReadADC();   				/* Get channel's conversion results  */
-	    if (u32_gAdc_Value > 3750) {
-	    	IP_PTD->PSOR |= (1<<PTD0) | (1<<PTD16);
-	      	IP_PTD->PCOR |= (1<<PTD15);
-	    }
-	    else if (u32_gAdc_Value > 2500) {
-	    	IP_PTD->PSOR |= (1<<PTD0) | (1<<PTD15);
-	    	IP_PTD->PCOR |= (1<<PTD16);
-	    }
-	    else if (u32_gAdc_Value >1250) {
-	    	IP_PTD->PSOR |= (1<<PTD15) | (1<<PTD16);
-	      	IP_PTD->PCOR |= (1<<PTD0);
-	    }
-	    else {
-	    	IP_PTD->PSOR |= (1<<PTD0) | (1<< PTD15) | (1<<PTD16);
-	    }
-	  }
+    for(;;) {
+        ADCChannelConversion(ADC_CHANNEL);
+        while(ADConversionCompleted()==0){}           /* Wait for conversion complete flag */
+        u32_gAdc_Value = ReadADC();                   /* Get channel's conversion results  */
+        if (u32_gAdc_Value > 3750) {
+            IP_PTD->PSOR |= (1<<PTD0) | (1<<PTD16);
+              IP_PTD->PCOR |= (1<<PTD15);
+        }
+        else if (u32_gAdc_Value > 2500) {
+            IP_PTD->PSOR |= (1<<PTD0) | (1<<PTD15);
+            IP_PTD->PCOR |= (1<<PTD16);
+        }
+        else if (u32_gAdc_Value >1250) {
+            IP_PTD->PSOR |= (1<<PTD15) | (1<<PTD16);
+              IP_PTD->PCOR |= (1<<PTD0);
+        }
+        else {
+            IP_PTD->PSOR |= (1<<PTD0) | (1<< PTD15) | (1<<PTD16);
+        }
+      }
 
 
     counter = 0;

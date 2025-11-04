@@ -1,6 +1,6 @@
 /**
  * @file adc.h
- * @author your name (you@domain.com)
+ * @author Nguyễn Trường Giang
  * @brief Declare initialization functions for ADC module
  * @version 0.1
  * @date 2025-11-01
@@ -13,7 +13,8 @@
 
 #include <stdint.h>
 
-void ADCInit(uint16_t ADC_Channel);
+void ADCInit(void);
+void ADCChannelConversion(uint16_t ADC_Channel);
 uint32_t ReadADC(void);
 uint8_t ADConversionCompleted(void);
 #endif /* ADC_H */
