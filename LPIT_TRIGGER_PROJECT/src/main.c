@@ -62,9 +62,10 @@ int main(void) {
     SPLLInit_128Mhz();
     RUNMode_64MHz();
     GpioInit();
+    ADCInit();
     HardwareTriggerADCConfig();
-    ADCInit(ADC_IN2);
     LpitInit();
+    ADCChannelConvert(ADC_IN2);
     for(;;) {
 	    while(ADConversionCompleted()){}   		    /* Wait for conversion complete flag */
 	    u32_gAdc_Value = ReadADC();   				/* Get channel's conversion results  */

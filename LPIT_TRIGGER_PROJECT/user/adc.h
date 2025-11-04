@@ -16,7 +16,8 @@
 #define ADC_CONVERSION_INCOMPLETE 0U
 #define ADC_CONVERT_ERROR 0U
 
-void ADCInit(uint16_t ADC_Channel);
+void ADCInit(void);
+void ADCChannelConvert (uint16_t ADC_Channel);
 void HardwareTriggerADCConfig(void);
 uint32_t ReadADC(void);
 uint8_t ADConversionCompleted(void);
