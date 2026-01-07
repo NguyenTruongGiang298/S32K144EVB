@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.py": "python",
+        "s32k144.h": "c",
+        "driver_nvic.h": "c",
+        "hal_nvic.h": "c"
+    }
+}

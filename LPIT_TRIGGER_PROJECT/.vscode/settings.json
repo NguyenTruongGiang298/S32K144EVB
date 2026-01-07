@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.py": "python",
+        "gpio.h": "c",
+        "adc.h": "c"
+    }
+}
